@@ -684,7 +684,7 @@ class ClusteringMixin(BaseMixin, ABC):
                    FROM buildings_tem
                    WHERE vertice_id IN %(v)s
                      AND type != 'Transformer';"""
-        self.cur.execute(query, {"v": tuple(map(int, vertices))})
+        self.cur.execute(query, {"v": tuple(map(int, vertices[:, 0]))})
         count = self.cur.fetchone()[0]
 
         return count
@@ -701,7 +701,7 @@ class ClusteringMixin(BaseMixin, ABC):
         DELETE
         FROM ways_tem_vertices_pgr
         WHERE id IN %(v)s;"""
-        self.cur.execute(query, {"v": tuple(map(int, vertices))})
+        self.cur.execute(query, {"v": tuple(map(int, vertices[:, 0]))})
 
     def update_large_kmeans_cluster(self, vertices: Union[list, tuple], cluster_count: int):
         """
@@ -725,7 +725,7 @@ class ClusteringMixin(BaseMixin, ABC):
                 FROM kmean AS k,
                      maxk AS m
                 WHERE b.osm_id = k.osm_id;"""
-        self.cur.execute(query, {"ca": cluster_count, "v": tuple(map(int, vertices))})
+        self.cur.execute(query, {"ca": cluster_count, "v": tuple(map(int, vertices[:, 0]))})
 
     def update_kmeans_cluster(self, vertices: list) -> None:
         """
@@ -742,7 +742,7 @@ class ClusteringMixin(BaseMixin, ABC):
                     END)
                 FROM maxk AS m
                 WHERE vertice_id IN %(v)s;"""
-        self.cur.execute(query, {"v": tuple(map(int, vertices))})
+        self.cur.execute(query, {"v": tuple(map(int, vertices[:, 0]))})
 
     def get_distance_matrix(
         self, kcid: int, regional_identifier: int, grid_level: str

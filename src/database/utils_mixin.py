@@ -59,7 +59,7 @@ class UtilsMixin(BaseMixin, ABC):
                 DELETE
                 FROM buildings_tem
                 WHERE vertice_id IN %(v)s;"""
-        self.cur.execute(query, {"v": tuple(map(int, vertices))})
+        self.cur.execute(query, {"v": tuple(map(int, vertices[:,0]))})
 
     def get_consumer_categories(self):
         """
