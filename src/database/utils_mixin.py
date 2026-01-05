@@ -23,7 +23,7 @@ class UtilsMixin(BaseMixin, ABC):
     def drop_temp_tables(self) -> None:
         for table_name in TEMP_CREATE_QUERIES.keys():
             self.cur.execute(f"DROP TABLE IF EXISTS {table_name}")
-        self.cur.execute("DROP TABLE IF EXISTS ways_tem_vertices_pgr")
+        #self.cur.execute("DROP TABLE IF EXISTS ways_tem_vertices_pgr CASCADE")
 
     def commit_changes(self):
         self.conn.commit()
