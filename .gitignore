@@ -2,8 +2,6 @@
 /raw_data/buildings/*
 /raw_data/imports/*
 /raw_data/ways/*.sql
-/raw_data/postcode.csv
-/raw_data/equipment_data.csv
 /raw_data/transformer_data/fetched_trafos/*
 /raw_data/transformer_data/processed_trafos/*
 tutorials/.ipynb_checkpoints/

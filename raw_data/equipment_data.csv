@@ -1,0 +1,16 @@
+name,type,application_area,ovh_ung,n_phases,voltage_level,s_max_kva,primary_voltage_kv,secondary_voltage_kv,reactance_pu,no_load_losses_kw,short_circuit_res_ohm,r_ohm_per_km,x_ohm_per_km,z_ohm_per_km,capacitance_nf_per_km,max_i_a,line_voltage,cost
+SUB_16MVA_UG,Substation,1,Underground,3,HV-MV,16000,69,12.47,0.0743,12.9,0.00714425,0,0,0,,,,2000000
+TRANS_50_1P_UG,Transformer,1,Underground,1,MV-LV,50,12.47,0.416,0.02,0.185,0.013824,0,0,0,,,,5000
+TRANS_75_1P_UG,Transformer,1,Underground,1,MV-LV,75,12.47,0.416,0.02,0.285,0.00768,0,0,0,,,,7000
+TRANS_100_1P_UG,Transformer,1,Underground,1,MV-LV,100,12.47,0.416,0.02,0.35,0.006,0,0,0,,,,9000
+TRANS_50_3P_UG,Transformer,1,Underground,3,MV-LV,50,12.47,0.416,0.02,0.185,0.018432,0,0,0,,,,6000
+TRANS_75_3P_UG,Transformer,1,Underground,3,MV-LV,75,12.47,0.416,0.0324,0.45,0.0402432,0,0,0,,,,35000
+TRANS_100_3P_UG,Transformer,1,Underground,3,MV-LV,100,12.47,0.416,0.0329,0.62,0.0278784,0,0,0,,,,37000
+CABLE_LV_2_0_1P_UG,Cable,1,Underground,1,LV,,,,,,,0.521653543,0.091863517,0.529680399,1.00E-06,221,0.416,10000
+CABLE_LV_4_0_1P_UG,Cable,1,Underground,1,LV,,,,,,,0.331364829,0.086942257,0.342580802,1.00E-06,290,0.416,11000
+CABLE_LV_2_0_3P_UG,Cable,1,Underground,3,LV,,,,,,,0.521653543,0.091863517,0.529680399,1.00E-06,221,0.416,10000
+CABLE_LV_4_0_3P_UG,Cable,1,Underground,3,LV,,,,,,,0.331364829,0.086942257,0.342580802,1.00E-06,290,0.416,11000
+CABLE_LV_750_3P_UG,Cable,1,Underground,3,LV,,,,,,,0.097440948,0.081036748,0.126734734,1.00E-06,650,0.416,16000
+CABLE_MV_1_0_1P_UG,Cable,1,Underground,1,MV,,,,,,,0.677165354,0.340551181,0.757976268,1.86E+02,200,12.47,200000
+CABLE_MV_1_0_3P_UG,Cable,1,Underground,3,MV,,,,,,,0.677165354,0.340551181,0.757976268,1.86E+02,200,12.47,200000
+CABLE_MV_1000_3P_UG,Cable,1,Underground,3,MV,,,,,,,0.074475066,0.236220472,0.247682553,4.75E+02,600,12.47,740000
