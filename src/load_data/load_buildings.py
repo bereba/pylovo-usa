@@ -42,7 +42,7 @@ def import_buildings_for_single_regional_identifier(gg: GridGenerator):
             REGION["COUNTY"].replace(" ", "_"),
             REGION["COUNTY_SUBDIVISION"].replace(" ", "_"),
             "BUILDINGS_OUTPUT",
-            "shp",
+            "SHP",
         )
     )
     shapefiles_pattern = os.path.join(data_path, "*.shp")
