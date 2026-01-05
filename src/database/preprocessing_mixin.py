@@ -413,10 +413,15 @@ class PreprocessingMixin(BaseMixin, ABC):
 
         return count
 
-    def draw_building_connection(self) -> None:
-        """
-        Updates ways_tem, creates pgr network topology in new tables and performs component analysis:
-        :return:
+    def build_pgr_network_topology(self, plz: int) -> None:
+        """Builds the pgRouting-compatible network topology from the updated `ways_tem` table.
+
+        This method uses the pgRouting 3.8+ workflow:
+        1. pgr_extractVertices(): Extracts unique vertices from edge geometries
+        2. UPDATE source: Links start points of edges to vertex IDs
+        3. UPDATE target: Links end points of edges to vertex IDs
+
+        This replaces the deprecated pgr_createTopology() function.
         """
 
         connection_query = """ SELECT setup_connection_infrastructure(); """
@@ -425,12 +430,62 @@ class PreprocessingMixin(BaseMixin, ABC):
         connection_query = """ SELECT draw_home_connections(); """
         self.cur.execute(connection_query)
 
-        topology_query = """select pgr_createTopology('ways_tem', 0.01, id:='way_id', the_geom:='geom', clean:=true) """
-        self.cur.execute(topology_query)
+        edge_table = f"ways_tem"
+        vertices_table = f"{edge_table}_vertices_pgr"
 
-        analyze_query = """SELECT pgr_analyzeGraph('ways_tem', 0.01, the_geom:='geom', id:='way_id');"""
+        # Ensure source and target columns exist on the edge table
+        # (required before pgr_extractVertices can work)
+        self.cur.execute(f"""
+            ALTER TABLE {edge_table} ADD COLUMN IF NOT EXISTS source integer;
+            ALTER TABLE {edge_table} ADD COLUMN IF NOT EXISTS target integer;
+        """)
 
-        self.cur.execute(analyze_query)
+        # Drop existing vertices table if it exists
+        self.cur.execute(f"DROP TABLE IF EXISTS {vertices_table} CASCADE;")
+
+        # Step 1: Create the vertices table using pgr_extractVertices
+        self.cur.execute(f"""
+            CREATE TABLE {vertices_table} AS
+            SELECT id, geom
+            FROM pgr_extractVertices('SELECT way_id AS id, geom FROM {edge_table} ORDER BY way_id');
+        """)
+
+        # Add primary key for performance
+        self.cur.execute(f"""
+            ALTER TABLE {vertices_table} ADD PRIMARY KEY (id);
+        """)
+
+        # Create spatial index on vertices for faster lookups
+        self.cur.execute(f"""
+            CREATE INDEX {vertices_table}_geom_idx ON {vertices_table} USING GIST (geom);
+        """)
+
+        # Step 2: Update source nodes - link start of each edge to matching vertex
+        self.cur.execute(f"""
+            UPDATE {edge_table} AS e
+            SET source = v.id
+            FROM {vertices_table} AS v
+            WHERE ST_StartPoint(e.geom) = v.geom;
+        """)
+
+        # Step 3: Update target nodes - link end of each edge to matching vertex
+        self.cur.execute(f"""
+            UPDATE {edge_table} AS e
+            SET target = v.id
+            FROM {vertices_table} AS v
+            WHERE ST_EndPoint(e.geom) = v.geom;
+        """)
+
+        # Create indexes on source and target for routing performance
+        self.cur.execute(f"""
+            CREATE INDEX IF NOT EXISTS {edge_table}_source_idx ON {edge_table} (source);
+            CREATE INDEX IF NOT EXISTS {edge_table}_target_idx ON {edge_table} (target);
+        """)
+
+        # Expose vertices table through a session-local view for easier downstream queries
+        self.cur.execute(
+            f"CREATE TEMP VIEW ways_tem_vertices_pgr AS SELECT * FROM {vertices_table}"
+        )
 
     def update_ways_cost(self) -> None:
         """
@@ -450,7 +505,7 @@ class PreprocessingMixin(BaseMixin, ABC):
         query = """UPDATE buildings_tem b
                    SET vertice_id = (SELECT id
                                      FROM ways_tem_vertices_pgr AS v
-                                     WHERE ST_Equals(v.the_geom, b.center));"""
+                                     WHERE ST_Equals(v.geom, b.center));"""
         self.cur.execute(query)
 
         query2 = """UPDATE buildings_tem b
