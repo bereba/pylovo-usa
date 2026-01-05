@@ -17,7 +17,7 @@ warnings.simplefilter(action="ignore", category=UserWarning)
 class DatabaseClient(PreprocessingMixin, ClusteringMixin, GridMixin, UtilsMixin):
     """Main database client handling connections."""
 
-    def __init__(self, dbname=DBNAME, user=USER, pw=PASSWORD, host=HOST, port=PORT, **kwargs):
+    def __init__(self, dbname=DBNAME, user=DBUSER, pw=PASSWORD, host=HOST, port=PORT, **kwargs):
         self.logger = utils.create_logger(
             name="DatabaseClient",
             log_level=LOG_LEVEL,

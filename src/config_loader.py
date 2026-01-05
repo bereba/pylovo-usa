@@ -32,7 +32,7 @@ DB_SUFFIX = os.getenv("DB_SUFFIX", CONFIG_DATA["DB_SUFFIX"])
 # Append suffix to database name if specified
 if DB_SUFFIX:
     DBNAME = f"{DBNAME}_{DB_SUFFIX}"
-USER = os.getenv("USER", CONFIG_DATA["USER"])
+DBUSER = os.getenv("DBUSER", CONFIG_DATA["DBUSER"])
 HOST = os.getenv("HOST", CONFIG_DATA["HOST"])
 PORT = os.getenv("PORT", CONFIG_DATA["PORT"])
 PASSWORD = os.getenv("PASSWORD", CONFIG_DATA["PASSWORD"])

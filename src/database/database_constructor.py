@@ -104,7 +104,7 @@ class DatabaseConstructor:
                 "-progress",
                 "-f",
                 "PostgreSQL",
-                f"PG:dbname={DBNAME} user={USER} password={PASSWORD} host={HOST} port={PORT}",
+                f"PG:dbname={DBNAME} user={DBUSER} password={PASSWORD} host={HOST} port={PORT}",
                 str(file_path),
                 "-nln",
                 # explicitly tells ogr2ogr where to append (for the case of

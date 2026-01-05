@@ -215,7 +215,7 @@ class GridGenerator:
         ways_count = self.dbc.set_ways_tem_table(self.regional_identifier)
         self.logger.info(f"The ways_tem table filled with {ways_count} ways")
         self.logger.info("Connecting road_network to the buildings, this might take a while...")
-        self.dbc.draw_building_connection()
+        self.dbc.build_pgr_network_topology(self.regional_identifier)
         self.logger.info("Building connection finished in ways_tem")
 
         self.dbc.update_ways_cost()
