@@ -1066,7 +1066,7 @@ class ClusteringMixin(BaseMixin, ABC):
                 # Get geometry for the optimal vertex (which is a
                 # connection_point on the road network)
                 geom_query = """
-                SELECT ST_Transform(the_geom, %s) as geom
+                SELECT ST_Transform(geom, %s) as geom
                 FROM ways_tem_vertices_pgr
                 WHERE id = %s
                 """
