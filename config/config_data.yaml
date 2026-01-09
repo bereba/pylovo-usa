@@ -1,7 +1,6 @@
 # Database connection configuration
-# Suffix for the database name
 DBNAME: pylovo_db_local
-USER: postgres
+DBUSER: postgres
 HOST: localhost
 PORT: 5432
 PASSWORD: postgres
